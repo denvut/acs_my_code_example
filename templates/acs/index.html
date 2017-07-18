@@ -1,0 +1,125 @@
+{% extends "acs/base.html" %}
+
+{% load security %}
+{% js_perms %}
+  add_config_button, delete_config_button = acs_admin
+{% endjs_perms %}
+
+{% load static from staticfiles %}
+{% load misc %}
+{% block custom_styles %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/acs.css' %}" />
+  <link rel="stylesheet" href={% static 'css/leaflet.css' %} />
+  <link rel="stylesheet" href={% static 'css/leaflet.fusesearch.css' %} />
+  <link rel="stylesheet" href={% static 'css/markercluster.css' %} />  
+{% endblock custom_styles %}
+
+{% block custom_scripts %}
+  {{ block.super }}
+  <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'js/validation.js' %}"></script>
+  <script src="{% static 'js/jquery.checkboxed-list.js' %}"></script>
+  <script src="{% static 'js/jquery.jeditable.js' %}"></script>
+  <script src="{% static 'js/jquery.checkbox.js' %}"></script>
+  <script src="{% static 'js/jquery.placeholder.min.js' %}"></script>
+  <script  src="{% static 'js/fuse.min.js' %}"></script>
+  <script defer src="{% static 'js/leaflet.js' %}"></script>
+  <script defer src="{% static 'js/leaflet.fusesearch.js' %}"></script>
+  <script defer src="{% static 'js/leaflet.markercluster.js' %}"></script>
+  <script defer src="{% static 'js/acs_config.js' %}"></script>
+
+{% endblock custom_scripts %}
+
+{% block title %}<title>ACS Configuration</title>{% endblock %}
+
+{% block Content %}
+
+<table id="acs_list" class="ubdir-list" >
+ <thead>
+  <tr>
+   <th class="hadrware_id">Hardware ID</th>
+   <th class="name">Name</th>
+   <th class="location">Location</th>
+   <th class="ip4_cidr">IPv4 Address/Prefix</th>
+   <th class="ip4_addr">IPv4 Default Gateway</th>
+   <th class="ip4_addr">IPv4 Nameserver</th>
+   <th class="vlandata">VLAN data</th>
+   <th class="vlanmanagement">VLAN management</th>
+   <th class="timestamp">Create/Edit Date</th>
+   <th class="invisible">Date sorting</th>
+   <th class="actions">Actions</th>
+  </tr>
+ </thead>
+ <tbody>
+  {% for config in system_configs %}
+    <tr id="object_{{ config.id }}" data-url="{% url 'acsconfig_api'  config.id  %}">
+    <td class="hardware_id">{{ config.hardware_id }}</td>
+    <td class="name">{{ config.name }}</td>
+    <td class="location">{{ config.location }}</td>
+    <td class="ip4_cidr autowidth_cell">{{ config.ip4_addr }}/{{ config.ip4_prefix }}</td>
+    <td class="ip4_addr autowidth_cell">
+        {% if config.ip4_gateway %}
+            {{ config.ip4_gateway}}
+        {% else %}
+             <span class="notset">
+
+                 {% if system_params.ip4_gateway.val %}
+                    Default used:{{ system_params.ip4_gateway.val }}
+                 {% else %}
+                     Parameter not used
+                 {% endif %}
+             </span>
+        {% endif %}
+    </td>
+    <td class="ip4_nameserver autowidth_cell">
+    {% if config.ip4_nameserver %}
+            {{ config.ip4_nameserver}}
+        {% else %}
+             <span class="notset">
+                {% if system_params.ip4_nameserver.val %}
+                    Default used: {{ system_params.ip4_nameserver.val }}
+                {% else %}
+                     Parameter not used
+                {% endif %}
+             </span>
+        {% endif %}
+    </td>
+    <td class="vlandata autowidth_cell">
+        {% if config.vlandata %}
+            {{ config.vlandata }}
+        {% else %}
+            <span class="notset">
+                {% if system_params.vlandata.val %}
+                    Default used: {{ system_params.vlandata.val }}
+                {% else %}
+                     Parameter not used
+                {% endif %}
+            </span>
+        {% endif %}
+    </td>
+    <td class="vlanmanagement autowidth_cell">
+        {% if config.vlanmanagement %}
+            {{ config.vlanmanagement }}
+        {% else %}
+            <span class="notset">
+                {% if system_params.vlanmanagement.val %}
+                    Default used: {{ system_params.vlanmanagement.val }}
+                {% else %}
+                     Parameter not used
+                {% endif %}
+            </span>
+        {% endif %}
+    </td>
+    <td class="timestamp autowidth_cell">{{ config.last_modified | datetime }}</td>
+    <td class="invisible">{{ config.last_modified| date:"U" }}</td>
+    <td style="display:none" class="actions"><button class="edit_one">Edit</button></td>
+    </tr>
+  {% endfor %}
+ </tbody>
+</table>
+
+{% include "acs/system_config_dialog.html" %}
+{% endblock %}
+

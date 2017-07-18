@@ -1,0 +1,21 @@
+{% extends "ube/configuration_base.html" %}
+
+{% block tree_path %}
+  {{ block.super }}
+  &gt; <a href="{% url 'acsadmin' %}" id="acs_url">ACS</a>
+{% endblock tree_path %}
+
+{% load is_active from misc %}
+
+{% block topmenu %}
+{% url 'acsadmin' as admin_url %}
+{% url 'acslogs' as logs_url %}
+{% url 'acs_settings' as acs_settings_url %}
+{% url 'maps' as maps_url %}
+<a href="{{ admin_url }}" class="{% is_active admin_url %}">Admin</a>
+<a href="{{ acs_settings_url }}" class="{% is_active acs_settings_url %}">Settings</a>
+<a href="{{ logs_url }}" class="{% is_active logs_url %}">Logs</a>
+<a href="{{ maps_url}}" class="{% is_active maps_url %}">On Map</a>
+{% endblock topmenu %}
+
+

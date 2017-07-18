@@ -1,0 +1,70 @@
+<div id="system_config_dialog" style="display:none;">
+ <form id="system_config_dialog_form" data-url="{% url 'acsconfig_api'  %}" > {% csrf_token %}
+  <div class="paramdialog">
+     <div class="form-error ui-state-error" id="system_config_warn" style="display: none"></div>
+  <table id="formlayout" class="form-layout" >
+      <tr>
+        <th><label for="hardware_id">Hardware ID:</label></th>
+        <td class="input-only">
+          <input type="text" id="hardware_id" name="hardware_id" />
+          <span class="input-hint" style="display: none"></span>
+          <span class="input-error" style="display: none"></span>
+        </td>
+      </tr>
+      <tr>
+        <th><label for="name">Name:</label></th>
+        <td class="input-only">
+          <input type="text" id="name" name="name" />
+          <span class="input-hint" style="display: none"></span>
+          <span class="input-error" style="display: none"></span>
+        </td>
+      </tr>
+      <tr>
+        <th><label for="location">Location:</label></th>
+        <td class="input-only">
+          <input type="text" id="location" name="location" />
+          <span class="input-hint" style="display: none"></span>
+          <span class="input-error" style="display: none"></span>
+        </td>
+      </tr>
+      <tr>
+        <th><label for="ip4_cidr">IPv4 Address/Prefix:</label></th>
+        <td class="input-only">
+          <input type="text" id="ip4_cidr" name="ip4_cidr" />
+          <span class="input-hint" style="display: none"></span>
+          <span class="input-error" style="display: none"></span>
+        </td>
+      </tr>
+
+    {% for name, item in system_params.iteritems %}
+      <tr>
+        <th><label for="{{ name }}">{{ item.fullname }}:</label></th>
+        <td>
+            <input type="text" id="{{ name }}" name="{{ name }}"  /><br>
+            <span class="defval"  id="d_{{ name }}">(default value:
+
+                {% if item.val %}
+                     {{ item.val }}
+                {% else %}
+                    not set
+                {% endif %})</span>
+            <span class="input-hint" style="display: none"></span>
+          <span class="input-error" style="display: none"></span>
+        </td>
+      </tr>
+    {% endfor %}
+    <tr>
+        <th><label for="geolocation">Geolocation:</label></th>
+        <td class="input-only">
+          <input type="text" id="geolocation" name="geolocation" />
+          <span class="input-hint" style="display: none"></span>
+          <span class="input-error" style="display: none"></span>
+        </td>
+      </tr>
+
+  </table>
+  </div>
+ <div id="map"  class="mapdialog" ></div>
+ </form>
+</div>
+

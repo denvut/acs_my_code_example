@@ -1,0 +1,42 @@
+{% extends "acs/base.html" %}
+
+{% load static from staticfiles %}
+{% load misc %}
+{% block custom_styles %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.css' %}" />
+{% endblock custom_styles %}
+
+{% block custom_scripts %}
+  {{ block.super }}
+  <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'js/acs_logs.js' %}"></script>
+{% endblock custom_scripts %}
+
+{% block title %}<title>ACS Logs</title>{% endblock %}
+
+{% block Content %}
+<table id="acs_logs" class="ubdir-list" data-url="{% url 'acslogs_data' %}">
+ <thead>
+  <tr>
+    <th class="datetime">Time</th>
+    <th>Hardware ID</th>
+    <th>System Type</th>
+    <th class="IP">Source</th>
+    <th>Message</th>
+  </tr>
+  <tr class="search">
+    <td class="datetime">
+    <input id="sys_begin_date_search" type="text" class="datetime_from"/> <br>
+    <input id="sys_end_date_search" type="text" class="datetime_to"/>
+    </td>
+    <td><input id="hardware_id_search" type="text" /></td>
+    <td><input id="syste_type_search" type="text" /></td>
+    <td><input id="source_search" type="text"/></td>
+    <td><input id="message_search" type="text"/></td>
+  </tr>
+ </thead>
+</table>
+
+{% endblock %}
+

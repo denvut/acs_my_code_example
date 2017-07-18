@@ -1,0 +1,35 @@
+{% extends "acs/base.html" %}
+
+
+{% load static from staticfiles %}
+
+{% block custom_includes %}
+  {{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.checkbox.css' %}"/>
+<script src="{% static 'js/jquery.jeditable.js' %}"></script>
+<script src="{% static 'js/validation.js' %}"></script>
+<script src="{% static 'js/jquery.checkbox.js' %}"></script>
+<script src="{% static 'js/nms_settings.js' %}"></script>
+{% endblock %}
+
+
+{% block title %}<title>ACS Configuration</title>{% endblock %}
+
+{% block Content %}
+ {{ block.super }}
+ <table id="settings" class="name_value" data-url="{% url api %}">
+    {% for name, display_name, value, possible_values, units, hint in settings %}
+      <tr>
+        <td>{{ display_name }}:</td>
+        <td>
+
+            <span name="{{ name }}" class="editable" data-units="{{ units }}" data-value="{{value}}">{{ value }}{{ units }}</span>
+
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+
+
+{% endblock Content %}
+
